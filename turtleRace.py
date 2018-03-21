@@ -4,8 +4,50 @@
 # Make turtles race on a track
 from turtle import *
 from random import *
+
+def celebration(turt):
+    size = 1
+    colorr = 255
+    colorg = 120
+    colorb = 0
+    cele1 = Pen("square")
+    cele1.color("pink")
+    cele2 = Pen("triangle")
+    cele2.color("brown")
+    cele3 = Pen()
+    cele3.color("black")
+    cele1.up()
+    cele2.up()
+    cele3.up()
+    cele1.speed(0)
+    cele2.speed(0)
+    cele3.speed(0)
+    cele1.goto(200, 200)
+    cele2.goto(250, 180)
+    cele3.goto(300, 160)
+    cele1.right(150)
+    cele2.right(150)
+    cele3.right(150)
+    xy = turt.position()
+    xgoto = xy[0]
+    ygoto = xy[1]
+    
+    for i in range(45):
+        cele1.fd(45)
+        cele2.fd(45)
+        cele3.fd(45)
+        turt.right(8)
+        turt.goto(xgoto, ygoto)
+        xgoto = xgoto - 10
+        turt.turtlesize(size, size)
+        size = size + 0.25
+        bgcolor(colorr, colorg, colorb)
+        colorr = colorr - 3
+        colorg = colorg + 3
+        colorb = colorb + 3
 title("Turtle Race")
-bgcolor("orange")
+colormode(255)
+bgcolor(255, 120, 0)
 writer = Pen()
 writer.ht()
 writer.speed(0)
@@ -87,30 +129,23 @@ while (True):
     if (coord1[0] >= 300):
         winner = "RED WINS"
         winc = "red"
-        racer1.turtlesize(2,2)
-        for i in range(90):
-            racer1.right(4)
+        celebration(racer1)
         break
     elif(coord2[0] >= 300):
         winner = "GREEN WINS"
         winc = "green"
-        racer2.turtlesize(2,2)
-        for i in range(90):
-            racer2.right(4)
+        celebration(racer2)
+        
         break
     elif (coord3[0] >= 300):
         winner = "BLUE WINS"
         winc = "blue"
-        racer3.turtlesize(2,2)
-        for i in range(90):
-            racer3.right(4)
+        celebration(racer3)
         break
     elif (coord4[0] >= 300):
         winner = "AQUA WINS"
         winc = "aqua"
-        racer4.turtlesize(2,2)
-        for i in range(90):
-            racer4.right(4)
+        celebration(racer4)
         break
     
 writer.up()
@@ -118,5 +153,3 @@ writer.goto(0, -260)
 writer.down()
 writer.color(winc)
 writer.write(winner, align = "center", font = ("Arial", 20, "bold"))
-
-
