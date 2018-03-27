@@ -18,21 +18,40 @@ def shootBall():
 
     goalie.up()
 
-    while ball.ycor() < 310:
+    while ball.ycor() < 220:
         randX = random.randint(-250, 250)
         goalie.up()
         goalie.goto(randX, 220)
         goalie.down()
         ball.fd(40)
-    
+        
     goalOrBlocked()
+    
 
 # ******************************************************************************
 # goalOrBlocked
 # ******************************************************************************
 
 def goalOrBlocked():
-    print ("You need to figure this out still.")
+    goalpos = goalie.position()
+    pos = ball.pos()
+    goaliepos = int(goalpos[0])
+    poss = int(pos[0])
+    
+    postup = tuple(range(poss-40, poss+40))
+
+    blockhit_history = []
+    
+    for i in range(goaliepos-50, goaliepos+50):
+        if i in postup:
+            blockhit_history = blockhit_history + ["blocked"]
+        else:
+            blockhit_history = blockhit_history + ["hit"]
+    
+    if "blocked" in blockhit_history:
+        print("blocked")
+    else:
+        print("goal")
     
 # ******************************************************************************
 # placeBall
@@ -92,9 +111,12 @@ writer.left(90)
 writer.fd(800)
 writer.left(90)
 writer.fd(480)
-#-240, 0
-##writer.goto(-240, 0)
-##writer.circle(10, 180)
+
+writer.up()
+writer.setheading(270)
+writer.goto(-100, -240)
+writer.down()
+writer.circle(100, 180)
 register_shape("ball.gif")
 
 ball = Pen()
@@ -117,5 +139,5 @@ goalie.down()
 goalie.shapesize(1,5)
 
 ball.onrelease(placeBall)
-done() 
+done()
 
