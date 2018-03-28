@@ -1,7 +1,7 @@
 # ------------------------------------------------------------------------------
-# K.Franchi
+# Rohan Putcha
 # 3/21/2018
-# penaltyKick_Franchi.py
+# penaltyKick_Putcha.py
 # ------------------------------------------------------------------------------
 from turtle import *
 import time
@@ -12,46 +12,58 @@ import random
 # ******************************************************************************
 
 def shootBall():
+    writer.undo()
     ball.up()
     ang = ball.towards(ballX, ballY)
     ball.setheading(ang)
-
     goalie.up()
-
+    global blockhit_history
+    blockhit_history = []
     while ball.ycor() < 220:
         randX = random.randint(-250, 250)
         goalie.up()
         goalie.goto(randX, 220)
         goalie.down()
         ball.fd(40)
-        
-    goalOrBlocked()
-    
+        if ball.ycor() > 205: #since the ball has a radius, it is tested for every possible time it is in the range of even the edge of the ball touching the goalie
+            blockhit_history = blockhit_history + goalOrBlocked(blockhit_history)
 
+    if "miss" in blockhit_history:
+        result = "MISS"
+        color = "dark grey"
+        
+    elif "blocked" in blockhit_history: #If even one "blocked" is in the list, then it is blocked (because that means the goalie touched the ball at some point)
+        result = "BLOCK"
+        color = "red"
+        
+    else:
+        result = "GOAL"
+        color = "blue"
+
+    writer.up()
+    writer.goto(0, -20)
+    writer.down()
+    writer.color(color)
+    writer.write(result, align = "center", font = ("Arial", 35, "bold"))
+    
 # ******************************************************************************
 # goalOrBlocked
 # ******************************************************************************
 
-def goalOrBlocked():
-    goalpos = goalie.position()
-    pos = ball.pos()
-    goaliepos = int(goalpos[0])
-    poss = int(pos[0])
-    
-    postup = tuple(range(poss-40, poss+40))
+def goalOrBlocked(blockhit_history):
+    goalpos = int(goalie.xcor())
+    pos = int(ball.xcor())
 
-    blockhit_history = []
+    if ((pos < -200) or (pos > 200)):
+        return ["miss"]
+    postup = list(range(pos-35, pos+35))
     
-    for i in range(goaliepos-50, goaliepos+50):
+    for i in range(goalpos-55, goalpos+55):
         if i in postup:
             blockhit_history = blockhit_history + ["blocked"]
         else:
             blockhit_history = blockhit_history + ["hit"]
-    
-    if "blocked" in blockhit_history:
-        print("blocked")
-    else:
-        print("goal")
+    return blockhit_history
     
 # ******************************************************************************
 # placeBall
@@ -137,6 +149,12 @@ goalie.up()
 goalie.goto(0,220)
 goalie.down()
 goalie.shapesize(1,5)
+
+writer.up()
+writer.goto(0, -200)
+writer.down()
+writer.write("Drag the ball to a location and release to kick", align = "center", font = ("Arial", 20, "bold"))
+
 
 ball.onrelease(placeBall)
 done()
