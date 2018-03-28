@@ -15,43 +15,43 @@ def shootBall():
     ball.up()
     ang = ball.towards(ballX, ballY)
     ball.setheading(ang)
-
     goalie.up()
-
+    global blockhit_history
+    blockhit_history = []
     while ball.ycor() < 220:
         randX = random.randint(-250, 250)
         goalie.up()
         goalie.goto(randX, 220)
         goalie.down()
         ball.fd(40)
+        if ball.ycor() > 190:
+            blockhis_history = goalOrBlocked(blockhit_history)
+
+    if "blocked" in blockhit_history:
+        print("blocked")
         
-    goalOrBlocked()
-    
+    else:
+        print("goal")
+        print(blockhit_history)
 
 # ******************************************************************************
 # goalOrBlocked
 # ******************************************************************************
 
-def goalOrBlocked():
+def goalOrBlocked(blockhit_history):
     goalpos = goalie.position()
     pos = ball.pos()
     goaliepos = int(goalpos[0])
     poss = int(pos[0])
     
     postup = tuple(range(poss-40, poss+40))
-
-    blockhit_history = []
     
-    for i in range(goaliepos-50, goaliepos+50):
+    for i in range(goaliepos-55, goaliepos+55):
         if i in postup:
             blockhit_history = blockhit_history + ["blocked"]
         else:
             blockhit_history = blockhit_history + ["hit"]
-    
-    if "blocked" in blockhit_history:
-        print("blocked")
-    else:
-        print("goal")
+    return blockhit_history
     
 # ******************************************************************************
 # placeBall
@@ -137,6 +137,7 @@ goalie.up()
 goalie.goto(0,220)
 goalie.down()
 goalie.shapesize(1,5)
+
 
 ball.onrelease(placeBall)
 done()
